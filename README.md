@@ -21,44 +21,355 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+---
+## Cara Menjalankan
+- Buat Database laravelapi
+- Jalankan perintah dibawah ini
+```properties
+cp .env.example .env
+php artisan key:generate
+php artisan serve
+```  
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## API ENDPOINT
+---
+**Menampilkan Produk**
+----
+  Mengembalikan data produk
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+* **URL**
 
-## Laravel Sponsors
+  /api/product
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+* **Method:**
 
-### Premium Partners
+  `GET`
+  
 
--   **[Vehikl](https://vehikl.com/)**
--   **[Tighten Co.](https://tighten.co)**
--   **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
--   **[64 Robots](https://64robots.com)**
--   **[Cubet Techno Labs](https://cubettech.com)**
--   **[Cyber-Duck](https://cyber-duck.co.uk)**
--   **[Many](https://www.many.co.uk)**
--   **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
--   **[DevSquad](https://devsquad.com)**
--   **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
--   **[OP.GG](https://op.gg)**
--   **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
--   **[Lendio](https://lendio.com)**
+* **Data Params**
 
-## Contributing
+  None
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+* **Success Response:**
 
-## Code of Conduct
+  * **Code:** 200 <br />
+    **Content:** ` {
+        "id": 1,
+        "name": "Barang Pertama",
+        "harga": "10000.00",
+        "stock": 100,
+        "keterangan": "Ini adalah barang pertama",
+        "created_at": "2022-09-03T09:14:23.000000Z",
+        "updated_at": "2022-09-03T09:14:23.000000Z"
+    }`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+* **Sample Call:**
 
-## Security Vulnerabilities
+  ```javascript
+    $.ajax({
+      url: "/api/product",
+      dataType: "json",
+      type : "GET",
+      success : function(r) {
+        console.log(r);
+      }
+    });
+  ```
+----
+  **Detail Produk**
+----
+  Mengembalikan detail product yang dicari.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+* **URL**
 
-## License
+  /api/product/:id
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+* **Method:**
+
+  `GET`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{"id": 1,
+    "name": "Barang Pertama",
+    "harga": "10000.00",
+    "stock": 100,
+    "keterangan": "Ini adalah barang pertama",
+    "created_at": "2022-09-03T09:14:23.000000Z",
+    "updated_at": "2022-09-03T09:14:23.000000Z"
+}`
+ 
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** `{ message: "Product not found." }`
+* **Sample Call:**
+
+  ```javascript
+    $.ajax({
+      url: "/api/product/1",
+      dataType: "json",
+      type : "GET",
+      success : function(r) {
+        console.log(r);
+      }
+    });
+  ```
+---
+  **Membuat Produk**
+----
+  Membuat produk baru.
+
+* **URL**
+
+  /api/product
+
+* **Method:**
+
+  `POST`
+
+* **Data Params**
+
+   `name[string]`
+   `harga[number]`
+   `stock[number]`
+   `keterangan[sting]`
+
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{ "product": {
+        "name": "Barang Kedua",
+        "harga": "10000",
+        "stock": "100",
+        "keterangan": "Ini adalah barang pertama"
+    },
+    "message": "Product has been create"     }`
+}`
+ 
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** ` "message": "The given data was invalid.",
+    "errors": {
+        "name": [
+            "The name has already been taken."
+        ]
+    }`
+
+  OR
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{
+    "message": "Unauthenticated."
+}`
+
+* **Sample Call:**
+
+  ```javascript
+    $.ajax({
+      url: "/api/product",
+      dataType: "json",
+      type : "POST",
+      data : {
+        name,
+        harga,
+        stock,
+        keterangan
+      },
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader('Authorization', 'BEARERTOKEN');
+    },
+      success : function(r) {
+        console.log(r);
+      }
+    });
+  ```
+  ---
+**Merubah Produk**
+----
+  Merubah produk yang sudah ada.
+
+* **URL**
+
+  /api/product/:id
+
+* **Method:**
+
+  `PUT` | `PATCH`
+
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+* **Data Params**
+
+   `name[string]`
+   `harga[number]`
+   `stock[number]`
+   `keterangan[sting]`
+
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{ "product": {
+        "name": "Barang Pertama",
+        "harga": "12345",
+        "stock": "123",
+        "keterangan": "update"
+    },
+    "message": "Product has been updated" }`
+ 
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** ` "message": "The given data was invalid.",
+    "errors": {
+        "name": [
+            "The name has already been taken."
+        ]
+    }`
+
+  OR
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{
+    "message": "Unauthenticated."
+}`
+
+* **Sample Call:**
+
+  ```javascript
+    $.ajax({
+      url: "/api/product/:id",
+      dataType: "json",
+      type : "PUT|PATCH",
+      data : {
+        name,
+        harga,
+        stock,
+        keterangan
+      },
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader('Authorization', 'BEARERTOKEN');
+    },
+      success : function(r) {
+        console.log(r);
+      }
+    });
+  ```
+  ---
+**Menghapus Produk**
+----
+  Menghapus produk yang sudah ada.
+
+* **URL**
+
+  /api/product/:id
+
+* **Method:**
+
+  `DELETE`
+
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{ "message": "Product <nama product> has been deleted." }`
+ 
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** ` "message": "Product Not Found." }`
+
+  OR
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{
+    "message": "Unauthenticated." }`
+
+* **Sample Call:**
+
+  ```javascript
+    $.ajax({
+      url: "/api/product/1",
+      dataType: "json",
+      type : "DELETE",
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader('Authorization', 'BEARERTOKEN');
+    },
+      success : function(r) {
+        console.log(r);
+      }
+    });
+  ```
+  ---
+**Generate Token**
+----
+  Memasukan credential untuk meminta token.
+
+* **URL**
+
+  /api/token
+
+* **Method:**
+
+  `POST`
+
+* **Data Params**
+
+   `email[string]`
+   `password[string]`
+   
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{"token": "2|SUM13lLNbsRiDqhTQtd2uaXCGshXAsbvmJlSfCUg"}`
+ 
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** ` "message": "The given data was invalid.",
+    "errors": {
+        "email": [
+            "The provided credentials are incorrect."
+        ]
+    }`
+
+
+* **Sample Call:**
+
+  ```javascript
+    $.ajax({
+      url: "/api/token",
+      dataType: "json",
+      type : "POST",
+      data : {
+        email, 
+        password
+      },
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader('Authorization', 'BEARERTOKEN');
+    },
+      success : function(r) {
+        console.log(r);
+      }
+    });
+  ```
+  ---

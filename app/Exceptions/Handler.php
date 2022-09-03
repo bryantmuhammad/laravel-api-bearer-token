@@ -44,7 +44,7 @@ class Handler extends ExceptionHandler
 
 
         $this->renderable(function (Exception $e, $request) {
-            if ($request->is('api/product/*') && ($request->isMethod('GET') || $request->isMethod('DELETE'))) {
+            if ($request->is('api/product/*') && $request->isMethod('GET')) {
                 return response()->json([
                     'message' => 'Product not found.'
                 ], 404);

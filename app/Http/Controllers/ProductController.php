@@ -71,12 +71,20 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy($request)
     {
-        Product::destroy($product->id);
+        $product = Product::where('id', $request)->get();
+
+        if ($product->count()) {
+            Product::destroy($product->id);
+
+            return response()->json([
+                'message' => 'Product ' . $product->name . " has been deleted."
+            ], 200);
+        }
 
         return response()->json([
-            'message' => 'Product ' . $product->name . " has been deleted."
+            'message' => 'Product Not Found.'
         ], 200);
     }
 }

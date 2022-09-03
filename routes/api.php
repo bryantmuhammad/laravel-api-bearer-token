@@ -26,6 +26,6 @@ Route::post('/token', [AuthController::class, 'login']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('product/{product}', [ProductController::class, 'update']);
     Route::post('product', [ProductController::class, 'store']);
-    Route::delete('product/{produk}', [ProductController::class, 'destroy']);
+    Route::delete('product/{product}', [ProductController::class, 'destroy']);
     Route::get('logout', [AuthController::class, 'logout']);
 });
