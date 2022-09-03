@@ -28,6 +28,7 @@ Laravel is accessible, powerful, and provides tools required for large, robust a
 ```properties
 cp .env.example .env
 php artisan key:generate
+php artisan migrate:fresh
 php artisan serve
 ```  
 
